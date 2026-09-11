@@ -51,6 +51,9 @@ export type AppAction =
   | { type: 'UPDATE_COMPLETED_RATING'; payload: { focusRating: number } }
   | { type: 'DISMISS_COMPLETION' }
   | { type: 'SET_DAILY_GOAL'; payload: { targetMinutes: number } }
+  | { type: 'ADD_SUBJECT'; payload: { name: string; color?: string } }
+  | { type: 'REMOVE_SUBJECT'; payload: { name: string } }
+  | { type: 'DELETE_SESSION'; payload: { id: string } }
   | { type: 'TOGGLE_SESSION_CREATOR' }
   | { type: 'LOAD_STATE'; payload: Partial<AppState> }
   | { type: 'CLEAR_DATA' };

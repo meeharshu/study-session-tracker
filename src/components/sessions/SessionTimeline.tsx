@@ -2,18 +2,23 @@ import React from 'react';
 import { StudySession } from '../../types';
 import { getRelativeDay, getTimeString, formatDurationLong } from '../../utils/formatTime';
 import { getDailySessionGroups } from '../../utils/statistics';
+import { useStudy } from '../../context/StudyContext';
 import RevealOnScroll from '../ui/RevealOnScroll';
+import { Trash2 } from 'lucide-react';
 
 interface SessionTimelineProps {
   sessions: StudySession[];
   limit?: number;
+  showDelete?: boolean;
 }
 
-const SessionTimeline: React.FC<SessionTimelineProps> = ({ sessions, limit }) => {
+const SessionTimeline: React.FC<SessionTimelineProps> = ({ sessions, limit, showDelete = false }) => {
+  const { dispatch } = useStudy();
+
   if (!sessions || sessions.length === 0) {
     return (
       <div className="py-12 text-center text-[color:var(--text-tertiary)] italic">
-        No sessions yet.
+        No sessions recorded yet.
       </div>
     );
   }
@@ -24,6 +29,13 @@ const SessionTimeline: React.FC<SessionTimelineProps> = ({ sessions, limit }) =>
     sessions: daySessions,
   }));
   const displayGroups = limit ? groupEntries.slice(0, limit) : groupEntries;
+
+  const handleDelete = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.confirm('Delete this session from history?')) {
+      dispatch({ type: 'DELETE_SESSION', payload: { id } });
+    }
+  };
 
   return (
     <div className="w-full">
@@ -42,14 +54,19 @@ const SessionTimeline: React.FC<SessionTimelineProps> = ({ sessions, limit }) =>
                 
                 return (
                   <RevealOnScroll key={session.id} delay={sessionIndex * 40}>
-                    <div className="flex flex-row py-3 group">
-                      <div className="w-16 flex-shrink-0 text-sm text-[color:var(--text-tertiary)] tabular-nums pt-0.5">
+                    <div className="flex flex-row items-center py-3 group hover:bg-[color:var(--bg-secondary)]/40 px-2 -mx-2 rounded-lg transition-colors">
+                      <div className="w-16 flex-shrink-0 text-sm text-[color:var(--text-tertiary)] tabular-nums">
                         {getTimeString(session.startTime)}
                       </div>
                       
                       <div className="flex-1 pr-4">
-                        <div className="text-sm font-medium text-[color:var(--text-primary)]">
-                          {session.subject}
+                        <div className="text-sm font-medium text-[color:var(--text-primary)] flex items-center gap-2">
+                          <span>{session.subject}</span>
+                          {session.intention && (
+                            <span className="text-[11px] font-normal text-[color:var(--text-tertiary)] italic truncate max-w-[220px]">
+                              &ldquo;{session.intention}&rdquo;
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-[color:var(--text-secondary)] mt-0.5">
                           {session.topic}
@@ -69,6 +86,17 @@ const SessionTimeline: React.FC<SessionTimelineProps> = ({ sessions, limit }) =>
                           </div>
                         )}
                       </div>
+
+                      {showDelete && (
+                        <button
+                          type="button"
+                          onClick={(e) => handleDelete(session.id, e)}
+                          title="Delete session"
+                          className="opacity-0 group-hover:opacity-100 ml-3 p-1.5 text-[color:var(--text-tertiary)] hover:text-rose-500 transition-all cursor-pointer rounded-full hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      )}
                     </div>
                   </RevealOnScroll>
                 );

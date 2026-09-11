@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import { AppState, AppAction, CurrentSession, StudySession } from '../types';
-import { mockSessions, subjects } from '../data/mockData';
+import { mockSessions, subjects as defaultSubjects } from '../data/mockData';
 import { generateId, getDayKey } from '../utils/formatTime';
 import { getTodayMinutes } from '../utils/statistics';
 
-const STORAGE_KEY = 'study-app-state';
+const STORAGE_KEY = 'study-app-state-v2';
 
 function loadState(): Partial<AppState> | null {
   try {
@@ -21,6 +21,7 @@ function saveState(state: AppState) {
       dailyGoal: state.dailyGoal,
       streak: state.streak,
       bestStreak: state.bestStreak,
+      subjects: state.subjects,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   } catch { /* ignore */ }
@@ -32,7 +33,7 @@ const initialState: AppState = {
   dailyGoal: { targetMinutes: 300, completedMinutes: 0 },
   streak: 18,
   bestStreak: 23,
-  subjects,
+  subjects: defaultSubjects,
   showSessionCreator: false,
   showCompletionScreen: false,
   completedSession: null,
@@ -114,10 +115,9 @@ function reducer(state: AppState, action: AppAction): AppState {
         intention: cs.intention,
       };
 
-      const newSessions = [...state.sessions, newSession];
+      const newSessions = [newSession, ...state.sessions];
       const todayMinutes = getTodayMinutes(newSessions);
 
-      // Check if streak needs updating
       const todayKey = getDayKey(new Date().toISOString());
       const yesterdayDate = new Date();
       yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -180,6 +180,38 @@ function reducer(state: AppState, action: AppAction): AppState {
         },
       };
 
+    case 'ADD_SUBJECT': {
+      const trimmed = action.payload.name.trim();
+      if (!trimmed || state.subjects.some(s => s.name.toLowerCase() === trimmed.toLowerCase())) {
+        return state;
+      }
+      const palette = ['#4A7C59', '#8B6914', '#6B5B8A', '#8B4D5C', '#4A6B8A', '#9C5A3C', '#3A7A8C'];
+      const color = action.payload.color || palette[state.subjects.length % palette.length];
+      return {
+        ...state,
+        subjects: [...state.subjects, { name: trimmed, color }],
+      };
+    }
+
+    case 'REMOVE_SUBJECT':
+      return {
+        ...state,
+        subjects: state.subjects.filter(s => s.name !== action.payload.name),
+      };
+
+    case 'DELETE_SESSION': {
+      const filteredSessions = state.sessions.filter(s => s.id !== action.payload.id);
+      const todayMinutes = getTodayMinutes(filteredSessions);
+      return {
+        ...state,
+        sessions: filteredSessions,
+        dailyGoal: {
+          ...state.dailyGoal,
+          completedMinutes: todayMinutes,
+        },
+      };
+    }
+
     case 'TOGGLE_SESSION_CREATOR':
       return {
         ...state,
@@ -228,21 +260,14 @@ export function StudyProvider({ children }: { children: React.ReactNode }) {
 
   // Timer tick
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const sessionStartRef = useRef<number | null>(null);
-  const pauseAccumRef = useRef<number>(0);
 
   useEffect(() => {
     if (state.currentSession && !state.currentSession.isPaused) {
-      if (sessionStartRef.current === null) {
-        sessionStartRef.current = Date.now();
-        pauseAccumRef.current = 0;
-      }
-
       timerRef.current = setInterval(() => {
         const now = Date.now();
         const totalElapsed = Math.floor((now - state.currentSession!.startedAt) / 1000);
         dispatch({ type: 'TICK', payload: { elapsed: totalElapsed } });
-      }, 200);
+      }, 250);
 
       return () => {
         if (timerRef.current) clearInterval(timerRef.current);
@@ -252,18 +277,10 @@ export function StudyProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state.currentSession?.isPaused, state.currentSession?.startedAt]);
 
-  // Reset timer refs when session ends
-  useEffect(() => {
-    if (!state.currentSession) {
-      sessionStartRef.current = null;
-      pauseAccumRef.current = 0;
-    }
-  }, [state.currentSession]);
-
   // Persist state
   useEffect(() => {
     saveState(state);
-  }, [state.sessions, state.dailyGoal, state.streak, state.bestStreak]);
+  }, [state.sessions, state.dailyGoal, state.streak, state.bestStreak, state.subjects]);
 
   return (
     <StudyContext.Provider value={{ state, dispatch }}>

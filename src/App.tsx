@@ -16,7 +16,7 @@ import StudyHeatmap from './components/insights/StudyHeatmap';
 import Records from './components/insights/Records';
 import { formatDateHeader } from './utils/formatTime';
 import { Page } from './types';
-import { Trash2, CheckCircle2 } from 'lucide-react';
+import { Trash2, CheckCircle2, Plus, X } from 'lucide-react';
 
 function TodayView() {
   const { state } = useStudy();
@@ -58,7 +58,7 @@ function TodayView() {
           <span className="font-label">RECENT SESSIONS</span>
           <span className="text-xs text-[color:var(--text-tertiary)]">Today & recent</span>
         </div>
-        <SessionTimeline sessions={state.sessions} limit={2} />
+        <SessionTimeline sessions={state.sessions} limit={2} showDelete={false} />
       </section>
     </div>
   );
@@ -80,7 +80,7 @@ function SessionsView() {
       </div>
 
       <div className="pt-4">
-        <SessionTimeline sessions={state.sessions} />
+        <SessionTimeline sessions={state.sessions} showDelete={true} />
       </div>
     </div>
   );
@@ -122,6 +122,8 @@ function SettingsView() {
   const [targetHours, setTargetHours] = useState(state.dailyGoal.targetMinutes / 60);
   const [savedNotice, setSavedNotice] = useState(false);
 
+  const [newSubName, setNewSubName] = useState('');
+
   const handleSaveGoal = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch({
@@ -130,6 +132,23 @@ function SettingsView() {
     });
     setSavedNotice(true);
     setTimeout(() => setSavedNotice(false), 2400);
+  };
+
+  const handleAddSubject = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = newSubName.trim();
+    if (trimmed) {
+      dispatch({ type: 'ADD_SUBJECT', payload: { name: trimmed } });
+      setNewSubName('');
+    }
+  };
+
+  const handleRemoveSubject = (name: string) => {
+    if (state.subjects.length <= 1) {
+      alert('You must keep at least one subject configured.');
+      return;
+    }
+    dispatch({ type: 'REMOVE_SUBJECT', payload: { name } });
   };
 
   const handleResetData = () => {
@@ -146,7 +165,7 @@ function SettingsView() {
           Preferences
         </div>
         <p className="text-sm text-[color:var(--text-secondary)] mt-2">
-          Tune your daily focus targets, workspace behavior, and local telemetry.
+          Tune your daily focus targets, workspace behavior, and subject library.
         </p>
       </div>
 
@@ -177,37 +196,62 @@ function SettingsView() {
         )}
       </form>
 
-      {/* Subjects overview */}
+      {/* Subjects Manager */}
       <div className="pt-6 border-t border-[color:var(--border-light)] space-y-4">
-        <span className="font-label block">CONFIGURED SUBJECTS</span>
-        <div className="flex flex-wrap gap-2">
+        <span className="font-label block">SUBJECT LIBRARY</span>
+        <div className="flex flex-wrap gap-2 mb-3">
           {state.subjects.map((sub) => (
             <div
               key={sub.name}
-              className="px-3 py-1.5 rounded-full border border-[color:var(--border)] text-xs text-[color:var(--text-secondary)] flex items-center gap-2"
+              className="px-3 py-1.5 rounded-full border border-[color:var(--border)] text-xs text-[color:var(--text-secondary)] flex items-center gap-2 group"
             >
               <span
                 className="w-2 h-2 rounded-full inline-block"
                 style={{ backgroundColor: sub.color }}
               />
               <span>{sub.name}</span>
+              <button
+                type="button"
+                onClick={() => handleRemoveSubject(sub.name)}
+                title={`Remove ${sub.name}`}
+                className="text-[color:var(--text-tertiary)] hover:text-rose-500 transition-colors ml-1 cursor-pointer"
+              >
+                <X size={12} />
+              </button>
             </div>
           ))}
         </div>
+
+        <form onSubmit={handleAddSubject} className="flex items-center gap-2 pt-2">
+          <input
+            type="text"
+            value={newSubName}
+            onChange={(e) => setNewSubName(e.target.value)}
+            placeholder="Add new subject..."
+            className="px-3 py-1.5 border border-[color:var(--border)] rounded-md bg-transparent text-xs text-[color:var(--text-primary)] focus:outline-none focus:border-[color:var(--accent)] w-48"
+          />
+          <button
+            type="submit"
+            disabled={!newSubName.trim()}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[color:var(--accent)] text-white text-xs font-medium hover:bg-[color:var(--accent-hover)] disabled:opacity-50 transition-colors cursor-pointer"
+          >
+            <Plus size={13} /> Add
+          </button>
+        </form>
       </div>
 
-      {/* Danger Zone */}
+      {/* Reset State */}
       <div className="pt-8 border-t border-[color:var(--border-light)] space-y-4">
         <span className="font-label block text-rose-500">DATA MANAGEMENT</span>
         <p className="text-xs text-[color:var(--text-tertiary)]">
-          All records and streak statuses reside in your browser&apos;s localStorage. Clearing data will restore original demo state.
+          All session entries and metrics are stored locally in your browser storage. Resetting restores original default state.
         </p>
         <button
           type="button"
           onClick={handleResetData}
           className="flex items-center gap-2 px-4 py-2 border border-rose-300 dark:border-rose-900/60 text-rose-600 dark:text-rose-400 rounded-md text-xs font-medium hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
         >
-          <Trash2 size={14} /> Reset Prototype State
+          <Trash2 size={14} /> Reset State
         </button>
       </div>
     </div>
