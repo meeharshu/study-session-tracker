@@ -1,0 +1,363 @@
+@import "tailwindcss";
+
+/* ============================================
+   DESIGN TOKENS — Study Visual System
+   ============================================ */
+
+:root {
+  /* Backgrounds */
+  --bg-primary: #FAFAF7;
+  --bg-secondary: #F2F1ED;
+  --bg-tertiary: #E8E6E1;
+
+  /* Text */
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6B6B;
+  --text-tertiary: #9A9A9A;
+
+  /* Accent — warm copper */
+  --accent: #C4652A;
+  --accent-hover: #B05A24;
+  --accent-muted: rgba(196, 101, 42, 0.10);
+  --accent-subtle: rgba(196, 101, 42, 0.05);
+
+  /* Borders */
+  --border: #E8E6E1;
+  --border-light: #F0EFEB;
+
+  /* Surfaces */
+  --surface-elevated: #FFFFFF;
+  --surface-overlay: rgba(250, 250, 247, 0.85);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  /* Heatmap levels */
+  --heatmap-0: #F2F1ED;
+  --heatmap-1: rgba(196, 101, 42, 0.15);
+  --heatmap-2: rgba(196, 101, 42, 0.35);
+  --heatmap-3: rgba(196, 101, 42, 0.60);
+  --heatmap-4: rgba(196, 101, 42, 0.90);
+
+  /* Environment */
+  --env-sky: #F5F3EE;
+  --env-horizon: #E8DFD2;
+  --env-ground: #D9D0C3;
+  --env-accent: rgba(196, 101, 42, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #141414;
+  --bg-secondary: #1C1C1C;
+  --bg-tertiary: #252525;
+
+  --text-primary: #E8E6E1;
+  --text-secondary: #8A8A8A;
+  --text-tertiary: #5A5A5A;
+
+  --accent: #D4793E;
+  --accent-hover: #E0874E;
+  --accent-muted: rgba(212, 121, 62, 0.12);
+  --accent-subtle: rgba(212, 121, 62, 0.06);
+
+  --border: #2A2A2A;
+  --border-light: #222222;
+
+  --surface-elevated: #1E1E1E;
+  --surface-overlay: rgba(20, 20, 20, 0.90);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  --heatmap-0: #1C1C1C;
+  --heatmap-1: rgba(212, 121, 62, 0.15);
+  --heatmap-2: rgba(212, 121, 62, 0.35);
+  --heatmap-3: rgba(212, 121, 62, 0.60);
+  --heatmap-4: rgba(212, 121, 62, 0.90);
+
+  --env-sky: #1A1918;
+  --env-horizon: #252220;
+  --env-ground: #302C28;
+  --env-accent: rgba(212, 121, 62, 0.06);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.4s ease, color 0.3s ease;
+  line-height: 1.5;
+  font-size: 15px;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.font-display {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.font-mono-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.font-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ============================================
+   FOCUS STYLES
+   ============================================ */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ============================================
+   SELECTIONS
+   ============================================ */
+
+::selection {
+  background-color: var(--accent-muted);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   SKIP LINK
+   ============================================ */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: white;
+  z-index: 100;
+  font-size: 14px;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================
+   TIMER GLOW
+   ============================================ */
+
+.timer-glow {
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(
+    circle at center,
+    var(--accent-subtle) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  pointer-events: none;
+}
+
+.timer-glow.active {
+  opacity: 1;
+}
+
+/* ============================================
+   ENVIRONMENT GRADIENT
+   ============================================ */
+
+.env-gradient {
+  background: linear-gradient(
+    180deg,
+    var(--env-sky) 0%,
+    var(--env-horizon) 60%,
+    var(--env-ground) 100%
+  );
+  transition: all 2s ease;
+}
+
+/* ============================================
+   HEATMAP TOOLTIP
+   ============================================ */
+
+.heatmap-tooltip {
+  position: absolute;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  z-index: 50;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+/* ============================================
+   MODAL BACKDROP
+   ============================================ */
+
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .modal-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   FOCUS RATING
+   ============================================ */
+
+.focus-rating-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+.focus-rating-btn:hover {
+  border-color: var(--text-tertiary);
+  color: var(--text-primary);
+}
+
+.focus-rating-btn.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
+.progress-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================
+   NAV LINK
+   ============================================ */
+
+.nav-link {
+  position: relative;
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+}
+
+.nav-link.active {
+  color: var(--text-primary);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--text-primary);
+  border-radius: 1px;
+}
