@@ -20,7 +20,7 @@ export default function Navigation({ currentPage, onNavigate }: NavigationProps)
     <>
       {/* Top Navigation */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-[color:var(--bg-primary)]/85 backdrop-blur-[16px] border-b border-[color:var(--border-light)] z-40 transition-colors">
-        <div className="max-w-7xl mx-auto h-full px-4 sm:px-8 flex items-center justify-between">
+        <div className="w-full h-full px-6 sm:px-10 lg:px-16 xl:px-20 flex items-center justify-between">
           <div className="font-medium tracking-tight text-base text-[color:var(--text-primary)]">
             Study
           </div>

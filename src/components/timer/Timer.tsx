@@ -25,7 +25,7 @@ export default function Timer() {
   const topic = cs?.topic || 'Select a subject to begin';
   
   return (
-    <div className="relative flex flex-col items-center justify-center w-full max-w-md mx-auto py-12">
+    <div className="relative flex flex-col items-center justify-center w-full py-12">
       {/* Timer glow */}
       <div className={`absolute inset-0 rounded-full blur-3xl transition-opacity duration-1000 bg-[color:var(--accent)] pointer-events-none -z-10 timer-glow ${isRunning ? 'active opacity-20' : 'opacity-0'}`} />
 

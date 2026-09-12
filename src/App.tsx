@@ -312,7 +312,7 @@ function MainContent() {
     <div className="min-h-screen flex flex-col bg-[color:var(--bg-primary)] text-[color:var(--text-primary)] transition-colors duration-300">
       <Navigation currentPage={currentPage} onNavigate={setCurrentPage} />
 
-      <main id="main" className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-10 pt-24 pb-28 md:pb-20">
+      <main id="main" className="flex-1 w-full px-6 sm:px-10 lg:px-16 xl:px-20 pt-24 pb-28 md:pb-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentPage}
@@ -335,7 +335,7 @@ function MainContent() {
 
       {/* Subtle Footer */}
       <footer className="hidden md:block py-6 border-t border-[color:var(--border-light)] text-center text-xs text-[color:var(--text-tertiary)]">
-        <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+        <div className="w-full px-6 sm:px-10 lg:px-16 xl:px-20 flex items-center justify-between">
           <span className="font-light tracking-wide">Study · A quiet space for focused work</span>
           <span className="font-mono text-[11px] opacity-70">v1.0.0</span>
         </div>
