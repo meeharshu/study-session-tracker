@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import { AppState, AppAction, CurrentSession, StudySession } from '../types';
-import { mockSessions, subjects as defaultSubjects } from '../data/mockData';
 import { generateId, getDayKey } from '../utils/formatTime';
 import { getTodayMinutes } from '../utils/statistics';
 
-const STORAGE_KEY = 'study-app-state-v2';
+const STORAGE_KEY = 'study-app-state-v3';
 
 function loadState(): Partial<AppState> | null {
   try {
@@ -27,12 +26,18 @@ function saveState(state: AppState) {
   } catch { /* ignore */ }
 }
 
+const defaultSubjects = [
+  { name: 'General Focus', color: '#8b5cf6' },
+  { name: 'Deep Work', color: '#3b82f6' },
+  { name: 'Reading', color: '#10b981' }
+];
+
 const initialState: AppState = {
-  sessions: mockSessions,
+  sessions: [],
   currentSession: null,
-  dailyGoal: { targetMinutes: 300, completedMinutes: 0 },
-  streak: 18,
-  bestStreak: 23,
+  dailyGoal: { targetMinutes: 120, completedMinutes: 0 },
+  streak: 0,
+  bestStreak: 0,
   subjects: defaultSubjects,
   showSessionCreator: false,
   showCompletionScreen: false,

@@ -13,7 +13,7 @@ export default function TimerControls() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => dispatch({ type: 'TOGGLE_SESSION_CREATOR' })}
-          className="px-8 py-3 rounded-full bg-[color:var(--accent)] text-white text-sm font-medium uppercase tracking-wider"
+          className="px-8 py-3.5 rounded-full bg-[color:var(--accent)] text-white text-sm font-semibold uppercase tracking-widest shadow-lg shadow-[color:var(--accent-muted)] hover:bg-[color:var(--accent-hover)] hover:shadow-[color:var(--accent-subtle)] transition-all"
         >
           Begin Session
         </motion.button>
@@ -29,7 +29,7 @@ export default function TimerControls() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => dispatch({ type: 'PAUSE_SESSION' })}
-            className="px-8 py-3 rounded-full bg-[color:var(--accent)] text-white text-sm font-medium uppercase tracking-wider"
+            className="px-8 py-3 rounded-full bg-[color:var(--accent)] text-white text-sm font-semibold uppercase tracking-widest shadow-md hover:bg-[color:var(--accent-hover)] transition-all"
           >
             Pause
           </motion.button>
@@ -37,7 +37,7 @@ export default function TimerControls() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => dispatch({ type: 'FINISH_SESSION', payload: { focusRating: 7 } })}
-            className="px-8 py-3 rounded-full bg-transparent border border-[color:var(--border)] text-[color:var(--text-secondary)] text-sm font-medium uppercase tracking-wider"
+            className="px-8 py-3 rounded-full bg-[color:var(--bg-primary)] border border-[color:var(--border)] text-[color:var(--text-secondary)] text-sm font-medium uppercase tracking-widest hover:text-[color:var(--text-primary)] hover:border-[color:var(--text-tertiary)] transition-all"
           >
             Finish
           </motion.button>
@@ -48,7 +48,7 @@ export default function TimerControls() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => dispatch({ type: 'RESUME_SESSION' })}
-            className="px-8 py-3 rounded-full bg-[color:var(--accent)] text-white text-sm font-medium uppercase tracking-wider"
+            className="px-8 py-3 rounded-full bg-[color:var(--text-primary)] text-[color:var(--bg-primary)] text-sm font-semibold uppercase tracking-widest shadow-md transition-all"
           >
             Resume
           </motion.button>
@@ -56,7 +56,7 @@ export default function TimerControls() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => dispatch({ type: 'RESET_SESSION' })}
-            className="px-8 py-3 rounded-full bg-transparent border border-[color:var(--border)] text-[color:var(--text-secondary)] text-sm font-medium uppercase tracking-wider"
+            className="px-6 py-3 rounded-full bg-transparent border border-[color:var(--border)] text-[color:var(--text-tertiary)] text-xs font-medium uppercase tracking-widest hover:text-rose-500 hover:border-rose-500/50 transition-all"
           >
             Reset
           </motion.button>
@@ -64,7 +64,7 @@ export default function TimerControls() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => dispatch({ type: 'FINISH_SESSION', payload: { focusRating: 7 } })}
-            className="px-8 py-3 rounded-full bg-transparent border border-[color:var(--border)] text-[color:var(--text-secondary)] text-sm font-medium uppercase tracking-wider"
+            className="px-6 py-3 rounded-full bg-[color:var(--bg-primary)] border border-[color:var(--border)] text-[color:var(--text-secondary)] text-xs font-medium uppercase tracking-widest hover:text-emerald-600 hover:border-emerald-500/50 transition-all"
           >
             Finish
           </motion.button>

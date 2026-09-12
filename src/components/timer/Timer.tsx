@@ -33,8 +33,14 @@ export default function Timer() {
         {/* Orbital ring */}
         <svg 
           viewBox="0 0 300 300" 
-          className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none"
+          className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none drop-shadow-xl"
         >
+          <defs>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
           {/* Background circle */}
           <circle 
             cx="150" 
@@ -42,7 +48,8 @@ export default function Timer() {
             r={radius}
             fill="none"
             stroke="var(--border)"
-            strokeWidth="1"
+            strokeWidth="0.5"
+            className="opacity-50"
           />
           {/* Progress arc */}
           <motion.circle 
@@ -51,11 +58,13 @@ export default function Timer() {
             r={radius}
             fill="none"
             stroke="var(--accent)"
-            strokeWidth="2"
+            strokeWidth="2.5"
             strokeDasharray={circumference}
             animate={{ strokeDashoffset }}
             transition={{ ease: "linear", duration: 0.2 }}
             strokeLinecap="round"
+            filter={isRunning ? "url(#glow)" : undefined}
+            className="transition-all duration-700"
           />
           {/* Orbiting dot */}
           <motion.g 
