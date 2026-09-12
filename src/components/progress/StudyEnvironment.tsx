@@ -26,7 +26,7 @@ export default function StudyEnvironment() {
   const activeDots = Math.floor(progress * 30);
 
   return (
-    <div className="overflow-hidden rounded-lg w-full h-[120px] md:h-[160px] relative bg-[color:var(--env-sky)]">
+    <div className="overflow-hidden rounded-2xl border border-[color:var(--border-light)] shadow-sm w-full h-[120px] md:h-[160px] relative bg-[color:var(--env-sky)]">
       <svg
         viewBox="0 0 800 160"
         preserveAspectRatio="xMidYMid slice"

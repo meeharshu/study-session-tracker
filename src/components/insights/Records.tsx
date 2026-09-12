@@ -41,16 +41,18 @@ export default function Records() {
 
   return (
     <div className="w-full">
-      <div className="font-label mb-8">PERSONAL RECORDS</div>
-      <div className="space-y-10">
+      <div className="font-label mb-6">PERSONAL RECORDS</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5">
         {records.map((record, i) => (
-          <RevealOnScroll key={i} delay={i * 60}>
-            <div className="relative pl-6">
-              <div className="absolute left-0 top-0 w-[2px] h-full bg-[color:var(--accent)]" />
-              <div className="font-label">{record.label}</div>
-              <div className="font-display text-3xl mt-2">{record.value}</div>
+          <RevealOnScroll key={i} delay={i * 50}>
+            <div className="relative p-5 rounded-2xl bg-[color:var(--bg-secondary)]/50 border border-[color:var(--border-light)] shadow-sm hover:shadow-md transition-all flex flex-col justify-between h-full overflow-hidden">
+              <div className="absolute top-0 left-0 bottom-0 w-1 bg-[color:var(--accent)]" />
+              <div>
+                <div className="font-label text-[10px] text-[color:var(--text-tertiary)] pl-1">{record.label}</div>
+                <div className="font-display text-2xl md:text-3xl font-light text-[color:var(--text-primary)] mt-2 pl-1 truncate">{record.value}</div>
+              </div>
               {record.sub && (
-                <div className="text-xs text-[color:var(--text-tertiary)] mt-1">
+                <div className="text-xs text-[color:var(--text-tertiary)] mt-3 pl-1 truncate">
                   {record.sub}
                 </div>
               )}

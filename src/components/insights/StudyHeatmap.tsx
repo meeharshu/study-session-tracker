@@ -52,7 +52,7 @@ export default function StudyHeatmap() {
   const svgHeight = ROWS * CELL_TOTAL + 20;
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full p-6 rounded-2xl bg-[color:var(--bg-secondary)]/50 border border-[color:var(--border-light)] shadow-sm hover:shadow-md transition-all">
       <div className="font-label mb-4">STUDY ACTIVITY</div>
       <svg
         viewBox={`0 0 ${svgWidth} ${svgHeight}`}

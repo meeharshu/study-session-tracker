@@ -26,17 +26,21 @@ export default function InsightPanel() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 py-8">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5 py-4">
       {statItems.map((stat, i) => (
-        <RevealOnScroll key={i} delay={i * 60}>
-          <div>
-            <span className="font-label">{stat.label}</span>
-            <div className="font-display text-3xl md:text-4xl mt-2">{stat.value}</div>
-            {stat.sub && (
-              <div className="text-xs text-[color:var(--text-tertiary)] mt-1">
-                {stat.sub}
-              </div>
-            )}
+        <RevealOnScroll key={i} delay={i * 40}>
+          <div className="p-5 rounded-2xl bg-[color:var(--bg-secondary)]/50 border border-[color:var(--border-light)] shadow-sm hover:shadow-md transition-all flex flex-col justify-between h-full group">
+            <span className="font-label text-[10px] text-[color:var(--text-tertiary)] group-hover:text-[color:var(--accent)] transition-colors">{stat.label}</span>
+            <div className="mt-3">
+              <div className="font-display text-2xl md:text-3xl font-light text-[color:var(--text-primary)] truncate">{stat.value}</div>
+              {stat.sub ? (
+                <div className="text-xs text-[color:var(--text-tertiary)] mt-1 truncate">
+                  {stat.sub}
+                </div>
+              ) : (
+                <div className="h-4 mt-1" />
+              )}
+            </div>
           </div>
         </RevealOnScroll>
       ))}
